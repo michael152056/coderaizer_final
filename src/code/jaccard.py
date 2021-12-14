@@ -10,12 +10,8 @@ param = sys.argv[3]
 chars = 15
 
 #Palabras claves
-keywords = ['and',	'del',	'for',	'is',	'raise',
-'assert',	'elif',	'from',	'lambda',	'return',
-'break',	'else',	'global',	'not',	'try',
-'class',	'except',	'if',	'or',	'while',
-'continue',	'exec',	'import',	'pass',	'with',
-'def',	'finally',	'in',	'print',	'yield']
+keywords = sys.argv[4]
+
 
 # 1. Tokenización
 
