@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Administrador</title>
     <!--  <link rel="stylesheet" href="/css/sesion.css"> -->
     <link rel="stylesheet" href="css/coderaizer.css">
@@ -24,13 +25,10 @@
                 <div class="lenguajes">
                     <ul class="nav nav-pills nav-fill">
                         <li class="nav-item">
-                            <a class="nav-link nav-default"  href="coderaizer.php">Python</a>
+                            <a class="nav-link nav-default"  href="index.php">Python</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-active " aria-current="page" href="coderaizer.php">Java</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-default " href="coderaizer.php">C++</a>
+                            <a class="nav-link nav-active " aria-current="page" href="coderaizer_java.php">Java</a>
                         </li>
                     </ul>
 
@@ -53,16 +51,16 @@
                     </div>
 
                     <div class="div2" id="contenido">
-                        <img class="img-fluid w-75" src="img/javascript.png" alt="Imágen de software">
+                        <img class="img-fluid w-75" src="img/img_javascript1.jpg" alt="Imágen de software">
                     </div>
 
                 </div>
                 <div class="controles">
                     <div class="field button metodos">
                         <p>Métodos</p><hr>
-                        <button class="btn-coderaizer btn jaccard" onclick="jaccard()"> Jaccard </button>
-                        <button class="btn-coderaizer btn coseno" onclick="coseno()"> Coseno </button>
-                        <button class="btn-coderaizer btn semantica" onclick="semantica()"> Semántica </button>
+                        <button class="btn-coderaizer btn jaccard" onclick="jaccard_js()"> Jaccard </button>
+                        <button class="btn-coderaizer btn coseno" onclick="coseno_js()"> Coseno </button>
+                        <button class="btn-coderaizer btn semantica" onclick="semantica_js()"> Semántica </button>
                         <button class="btn-coderaizer btn actualizar" onclick="refresh()"><i class="fas fa-redo"></i> Refrescar </button>
                         <hr>
                     </div>
@@ -85,20 +83,10 @@
                     </div>
 
                     <div class="div4" id="contenido2">
-                        <img class="img-fluid w-75" src="img/img_javascript1.jpg" alt="Imágen de software">
+                        <img class="img-fluid w-50" src="img/javascript.png" alt="Imágen de software">
                     </div>
 
                 </div>
-
-                <div class="resultados">
-                    <div class="numerico" id="resultado_numerico">
-
-                    </div>
-                    <div class="grafico" id="grafico">
-
-                    </div>
-                </div>
-
             </div>
         </form>
     </section>
