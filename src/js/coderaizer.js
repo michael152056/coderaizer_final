@@ -9,6 +9,17 @@ var variables = [];
 var variables_coseno = [];
 var variables_semantica = [];
 var cont = 0;
+var keywords = ['and',	'del',	'for',	'is',	'raise',
+'assert',	'elif',	'from',	'lambda',	'return',
+'break',	'else',	'global',	'not',	'try',
+'class',	'except',	'if',	'or',	'while',
+'continue',	'exec',	'import',	'pass',	'with',
+'def',	'finally',	'in',	'print',	'yield'];
+
+var keywords_java = ['break','case','catch','class','const','continue','debugger','default','delete'
+,'do','else','export','extends','finally','for','function','if','import','in','instanceof','new','return'
+,'super','switch','this','throw','try','typeof','var','void','while','with','yield','implements','interface',
+'let','package','private','protected','public','static'];
 
 $("#code2").prop("disabled", true); //Disable
 $("#code1").prop("disabled", true); //Disable
@@ -233,7 +244,7 @@ function refresh() {
 }
 
 function jaccard() {
-
+  if ($("#area").length > 0 && $("#area2").length > 0){
   var texto = "";
   var similitud = 0;
   let xhr = new XMLHttpRequest();
@@ -263,8 +274,89 @@ function jaccard() {
   let formData = new FormData(form);
   formData.append('documento_1', fichero1);
   formData.append('documento_2', fichero2);
+  formData.append('keywords',keywords);
+  xhr.send(formData);
+}else{
+  error('Una vez que seleccionaste el archivo dale clic en "Mostrar código" ;)');
+}
+}
+
+function jaccard_js() {
+  if ($("#area").length > 0 && $("#area2").length > 0){
+  var texto = "";
+  var similitud = 0;
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "INCLUDES/funciones/jaccard.php", true);
+  xhr.onload = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        texto = JSON.parse(xhr.responseText);
+        const myArray = texto.split(",");
+        similitud = parseInt(myArray[0]);
+        variables.push(fichero1);
+        variables.push(fichero2);
+        if (similitud >= 0 && similitud <= 30) {
+          porcentaje_similitud('<div style="width: 100%; height: 2rem; background-color:green"></div><p>Resultados de similitud</p><h1 style="font-size: 95px">' + similitud + '% </h1><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[1] + ' segundos </p><button class="btn-coderaizer btn actualizar" onclick="mapa_jaccard_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf()"><i class="fas fa-file-pdf"></i> PDF</button>', 'green');
+        }
+        if (similitud > 30 && similitud <= 60) {
+          porcentaje_similitud('<div style="width: 100%; height: 2rem; background-color:orange"></div><p>Resultados de similitud</p><h1 style="font-size: 95px">' + similitud + '% </h1><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[1] + ' segundos </p><button class="btn-coderaizer btn actualizar" onclick="mapa_jaccard_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf()"><i class="fas fa-file-pdf"></i> PDF</button>', 'orange');
+        }
+        if (similitud > 60 && similitud <= 100) {
+          porcentaje_similitud('<div style="width: 100%; height: 2rem; background-color:red"></div><p>Resultados de similitud</p><h1 style="font-size: 95px">' + similitud + '% </h1><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[1] + ' segundos </p><button class="btn-coderaizer btn actualizar" onclick="mapa_jaccard_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf()"><i class="fas fa-file-pdf"></i> PDF</button>', 'red');
+        }
+
+
+      }
+    }
+  }
+  let formData = new FormData(form);
+  formData.append('documento_1', fichero1);
+  formData.append('documento_2', fichero2);
+  formData.append('keywords',keywords_java);
+  xhr.send(formData);
+}else{
+  error('Hola! una vez que seleccionaste el archivo dale clic en "Mostrar código" ;)');
+}
+}
+
+function mapa_jaccard_js() {
+  var variables_totales = [...new Set(variables)];
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "INCLUDES/funciones/jaccardtocsv.php", true);
+  xhr.onload = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        Swal.fire({
+          html: '<img class="w-100" src="../INCLUDES/funciones/mapa.php"></img>',
+          width: 800,
+          padding: '3em',
+          color: 'green'
+        }).then((result) => {
+          if (result.value) {
+            var params = "hola?";
+            $.ajax({
+              data: params, //Aqui envias algun parametro en tu caso puede ser la fecha y hora mediante json
+              url: '../INCLUDES/funciones/mapa.php',
+              dataType: 'html',
+              type: 'post',
+              success: function (response) {
+                  console.log("Exito");
+              }
+            });
+          }
+        })
+      }
+    }
+  }
+  let formData = new FormData(form);
+  for (let i = 0; i < variables_totales.length; i++) {
+    formData.append('array' + i, variables_totales[i]);
+    formData.append('size', variables_totales.length);
+  }
+  formData.append('keywords', keywords_java);
   xhr.send(formData);
 }
+
 
 function mapa_jaccard() {
   var variables_totales = [...new Set(variables)];
@@ -300,6 +392,7 @@ function mapa_jaccard() {
     formData.append('array' + i, variables_totales[i]);
     formData.append('size', variables_totales.length);
   }
+  formData.append('keywords', keywords);
   xhr.send(formData);
 }
 
@@ -338,8 +431,49 @@ function mapa_coseno() {
     formData.append('array' + i, variables_totales[i]);
     formData.append('size', variables_totales.length);
   }
+  formData.append('keywords', keywords);
   xhr.send(formData);
 }
+
+function mapa_coseno_js() {
+  var variables_totales = [...new Set(variables_coseno)];
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "INCLUDES/funciones/cosenotocsv.php", true);
+  xhr.onload = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        Swal.fire({
+          html: '<img class="w-100" src="../INCLUDES/funciones/mapa_coseno.php"></img>',
+          width: 800,
+          padding: '3em',
+          color: 'green'
+        }).then((result) => {
+          if (result.value) {
+            var params = "hola?";
+            $.ajax({
+              data: params, //Aqui envias algun parametro en tu caso puede ser la fecha y hora mediante json
+              url: '../INCLUDES/funciones/mapa_coseno.php',
+              dataType: 'html',
+              type: 'post',
+              success: function (response) {
+                  console.log("Exito");
+              }
+            });
+          }
+        })
+
+      }
+    }
+  }
+  let formData = new FormData(form);
+  for (let i = 0; i < variables_totales.length; i++) {
+    formData.append('array' + i, variables_totales[i]);
+    formData.append('size', variables_totales.length);
+  }
+  formData.append('keywords', keywords_java);
+  xhr.send(formData);
+}
+
 
 
 function mapa_semantica() {
@@ -377,10 +511,51 @@ function mapa_semantica() {
     formData.append('array' + i, variables_totales[i]);
     formData.append('size', variables_totales.length);
   }
+  formData.append('keywords', keywords);
+  xhr.send(formData);
+}
+
+function mapa_semantica_js() {
+  var variables_totales = [...new Set(variables_semantica)];
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "INCLUDES/funciones/semanticatocsv.php", true);
+  xhr.onload = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        Swal.fire({
+          html: '<img class="w-100" src="../INCLUDES/funciones/mapa_semantica.php"></img>',
+          width: 800,
+          padding: '3em',
+          color: 'green'
+        }).then((result) => {
+          if (result.value) {
+            var params = "hola?";
+            $.ajax({
+              data: params, //Aqui envias algun parametro en tu caso puede ser la fecha y hora mediante json
+              url: '../INCLUDES/funciones/mapa_semantica.php',
+              dataType: 'html',
+              type: 'post',
+              success: function (response) {
+                  console.log("Exito");
+              }
+            });
+          }
+        })
+
+      }
+    }
+  }
+  let formData = new FormData(form);
+  for (let i = 0; i < variables_totales.length; i++) {
+    formData.append('array' + i, variables_totales[i]);
+    formData.append('size', variables_totales.length);
+  }
+  formData.append('keywords', keywords_java);
   xhr.send(formData);
 }
 
 function coseno() {
+  if ($("#area").length > 0 && $("#area2").length > 0){
   var texto = "";
   var similitud = 0;
   let xhr = new XMLHttpRequest();
@@ -410,10 +585,54 @@ function coseno() {
   let formData = new FormData(form);
   formData.append('documento_1', fichero1);
   formData.append('documento_2', fichero2);
+  formData.append('keywords', keywords);
   xhr.send(formData);
+}else{
+  error('Hola! una vez que seleccionaste el archivo dale clic en "Mostrar código" ;)');
+}
+}
+
+
+function coseno_js() {
+  if ($("#area").length > 0 && $("#area2").length > 0){
+  var texto = "";
+  var similitud = 0;
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "INCLUDES/funciones/coseno.php", true);
+  xhr.onload = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        text = JSON.parse(xhr.responseText);
+        const myArray = text.split(",");
+        similitud = parseInt(myArray[0]);
+        variables_coseno.push(fichero1);
+        variables_coseno.push(fichero2);
+        if (similitud >= 0 && similitud <= 30) {
+          porcentaje_similitud('<div style="width: 100%; height: 2rem; background-color:green"></div><p>Resultados de similitud</p><h1 style="font-size: 95px">' + similitud + '% </h1><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[1] + ' segundos </p><button class="btn-coderaizer btn actualizar" onclick="mapa_coseno_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa_coseno.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf_coseno()"><i class="fas fa-file-pdf"></i> PDF</button>', 'green');
+        }
+        if (similitud > 30 && similitud <= 60) {
+          porcentaje_similitud('<div style="width: 100%; height: 2rem; background-color:orange"></div><p>Resultados de similitud</p><h1 style="font-size: 95px">' + similitud + '% </h1><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[1] + ' segundos </p><button class="btn-coderaizer btn actualizar" onclick="mapa_coseno_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa_coseno.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf_coseno()"><i class="fas fa-file-pdf"></i> PDF</button>', 'orange');
+        }
+        if (similitud > 60 && similitud <= 100) {
+          porcentaje_similitud('<div style="width: 100%; height: 2rem; background-color:red"></div><p>Resultados de similitud</p><h1 style="font-size: 95px">' + similitud + '% </h1><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[1] + ' segundos </p><button class="btn-coderaizer btn actualizar" onclick="mapa_coseno_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa_coseno.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf_coseno()"><i class="fas fa-file-pdf"></i> PDF</button>', 'red');
+        }
+
+
+      }
+    }
+  }
+  let formData = new FormData(form);
+  formData.append('documento_1', fichero1);
+  formData.append('documento_2', fichero2);
+  formData.append('keywords', keywords_java);
+  xhr.send(formData);
+}else{
+  error('Hola! una vez que seleccionaste el archivo dale clic en "Mostrar código" ;)');
+}
 }
 
 function semantica() {
+  if ($("#area").length > 0 && $("#area2").length > 0){
   var texto = "";
   var similitud = 0;
   var testing = "";
@@ -445,8 +664,54 @@ function semantica() {
   let formData = new FormData(form);
   formData.append('documento_1', fichero1);
   formData.append('documento_2', fichero2);
+  formData.append('keywords', keywords);
   xhr.send(formData);
+}else{
+  error('Hola! una vez que seleccionaste el archivo dale clic en "Mostrar código" ;)');
 }
+}
+
+
+function semantica_js() {
+  if ($("#area").length > 0 && $("#area2").length > 0){
+  var texto = "";
+  var similitud = 0;
+  var testing = "";
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "INCLUDES/funciones/semantica.php", true);
+  xhr.onload = () => {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        testing = JSON.parse(xhr.responseText);
+        const myArray = testing.split(",");
+        similitud = parseInt(myArray[1]);
+        similitud2 = parseInt(myArray[0]);
+        variables_semantica.push(fichero1);
+        variables_semantica.push(fichero2);
+        if (similitud > 0 && similitud <= 30) {
+          porcentaje_similitud('<div class="semantica_parent"><div  style="width: 100%; height: 2rem; background-color:green" class="doc1"> <div style="width: 100%; height: 2rem; background-color:green"></div><p>Documento #1</p><h1 style="font-size: 70px">' + similitud + '% </h1></div><div class="doc2"> <div style="width: 100%; height: 2rem; background-color:green"></div><p>Documento #2</p><h1 style="font-size: 70px">' + similitud2 + '% </h1></div><br><br><div class="doc3"><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[2] + ' segundos </p></div><button class="btn-coderaizer btn actualizar" onclick="mapa_semantica_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa_semantica.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf_semantica()"><i class="fas fa-file-pdf"></i> PDF</button>', 'green');
+        }
+        if (similitud >= 30 && similitud <= 60) {
+          porcentaje_similitud('<div class="semantica_parent"><div  style="width: 100%; height: 2rem; background-color:orange" class="doc1"> <div style="width: 100%; height: 2rem; background-color:orange"></div><p>Documento #1</p><h1 style="font-size: 70px">' + similitud + '% </h1></div><div class="doc2"> <div style="width: 100%; height: 2rem; background-color:orange"></div><p>Documento #2</p><h1 style="font-size: 70px">' + similitud2 + '% </h1></div><br><br><div class="doc3"><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[2] + ' segundos </p> </div><button class="btn-coderaizer btn actualizar" onclick="mapa_semantica_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa_semantica.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf_semantica()"><i class="fas fa-file-pdf"></i> PDF</button>', 'orange');
+        }
+        if (similitud > 60 && similitud <= 100) {
+          porcentaje_similitud('<div class="semantica_parent"><div  style="width: 100%; height: 2rem; background-color:red" class="doc1"> <div style="width: 100%; height: 2rem; background-color:red"></div><p>Documento #1</p><h1 style="font-size: 70px">' + similitud + '% </h1></div><div class="doc2"> <div style="width: 100%; height: 2rem; background-color:red"></div><p>Documento #2</p><h1 style="font-size: 70px">' + similitud2 + '% </h1></div><br><br><div class="doc3"><p style="color: rgb(112,117,122)">La consulta tardó: ' + myArray[2] + ' segundos </p></div> <button class="btn-coderaizer btn actualizar" onclick="mapa_semantica_js()"><i class="far fa-image"></i> Ver mapa</button><button class="btn-coderaizer btn actualizar"><a href="code/mapa_semantica.csv" download="mapa"><i class="fas fa-file-csv"></i> CSV </a></button> <button class="btn-coderaizer btn actualizar" onclick="generar_pdf_semantica()"><i class="fas fa-file-pdf"></i> PDF</button>', 'red');
+        }
+
+
+      }
+    }
+  }
+  let formData = new FormData(form);
+  formData.append('documento_1', fichero1);
+  formData.append('documento_2', fichero2);
+  formData.append('keywords', keywords_java);
+  xhr.send(formData);
+}else{
+  error('Hola! una vez que seleccionaste el archivo dale clic en "Mostrar código" ;)');
+}
+}
+
 
 
 
