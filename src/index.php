@@ -20,9 +20,9 @@
     <section class="form signup">
         <form action="#" method="POST" enctype="multipart/form-data" autocomplete="off">
             <div class="error-text"></div>
-            <div class="parent">
+            <div class="parent row gap-4">
 
-                <div class="lenguajes">
+                <div class="lenguajes row">
                     <ul class="nav nav-pills nav-fill">
                         <li class="nav-item">
                             <a class="nav-link nav-active" aria-current="page" href="index.php">Python</a>
@@ -33,29 +33,31 @@
                     </ul>
 
                 </div>
-                <div class="codigo1 text-center rounded" id="codigo1">
-                    <div class="div1">
+                <div class="container row ">
+                <div class="col col-md-5 col-lg-5 col-xl-5 col-sm-6 col-12 codigo1 text-center rounded" id="codigo1">
+                    <div class="div1 row">
                         <div class="mt-4 mb-4">Selecciona el archivo #1<br>
                             <div class="text-formats">Solo se permite formatos .py</div><br>
                             <span class="archivo">
                                 <input type="file" name="archivo" accept=".py" id="archivo" required>
                             </span>
-                            <label for="archivo"  class="rounded">
+                            <label for="archivo"  class="rounded mb-2">
                                 <span>
                                     <i class="fas fa-file-upload"></i> Subir archivo
                                 </span>
                             </label>
+                  
                             <button class="codigo_btn rounded code1" id="code1"><i class="fas fa-code"></i> MOSTRAR CODIGO</button>
                             <button class="check1" id="check1"><i class="fas fa-check-circle"></i></button>
                         </div>
                     </div>
 
-                    <div class="div2" id="contenido">
-                        <img class="img-fluid w-75" src="img/img_software.jpg" alt="Imágen de software">
+                    <div class="div2 row" id="contenido">
+                        <img src="img/img_software.jpg" alt="Imágen de software">
                     </div>
 
                 </div>
-                <div class="controles">
+                <div class="col col-md-2 col-lg-2 col-sm-12 col-xl-2 col-12 order-sm-last order-last controles">
                     <div class="field button metodos">
                         <p>Métodos</p><hr>
                         <button class="btn-coderaizer btn jaccard" onclick="jaccard()"> Jaccard </button>
@@ -65,14 +67,14 @@
                         <hr>
                     </div>
                 </div>
-                <div class="codigo2 text-center" id="codigo2">
-                    <div class="div3">
+                <div class="col col-md-5 col-lg-5 col-sm-6 col-xl-5 col-12 codigo2 text-center order-lg-last order-xl-last order-md-last" id="codigo2">
+                    <div class="div3 row">
                         <div class="mt-4 mb-4">Selecciona el archivo #2<br>
                             <div class="text-formats">Solo se permite formatos .py</div><br>
-                            <span class="archivo2">
+                            <span class="archivo2 ">
                                 <input type="file" name="archivo2" id="archivo2" accept=".py" required>
                             </span>
-                            <label for="archivo2" class="rounded">
+                            <label for="archivo2" class="rounded mb-2">
                                 <span>
                                     <i class="fas fa-file-upload"></i> Subir archivo
                                 </span>
@@ -82,10 +84,11 @@
                         </div>
                     </div>
 
-                    <div class="div4" id="contenido2">
-                        <img class="img-fluid w-50" src="img/img_software2.jpg" alt="Imágen de software">
+                    <div class="div4 row" id="contenido2">
+                        <img  src="img/img_software2.jpg" alt="Imágen de software">
                     </div>
 
+                </div>
                 </div>
             </div>
         </form>
