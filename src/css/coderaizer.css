@@ -1,82 +1,41 @@
-.parent {
-    display: grid;
-    grid-template-columns: 1fr 150px 1fr;
-    grid-template-rows: 50px 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 1em;
-}
 
-.lenguajes {
-    grid-area: 1 / 1 / 2 / 4;
-    width: 30% !important;
-}
-
-.codigo1 {
-    grid-area: 2 / 1 / 3 / 2;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 12em 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-}
-
-.div1 {
-    grid-area: 1 / 1 / 2 / 2;
-}
 
 .div2 {
-    grid-area: 2 / 1 / 3 / 2;
     background-color: white;
-    height: 30rem;
-    width: 100%;
+    justify-content: center;
 }
 
-.controles {
-    grid-area: 2 / 2 / 3 / 3;
+.parent{
+    width: 100% !important;
 }
 
-.codigo2 {
-    grid-area: 2 / 3 / 3 / 4;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 12em 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+body{
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.div3 {
-    grid-area: 1 / 1 / 2 / 2;
+.div2 img{
+    width: 27em;
 }
+
+.div4 img{
+    width: 21em;
+}
+
 
 .div4 {
-    grid-area: 2 / 1 / 3 / 2;
     background-color: white;
-    height: 30rem;
-    width: 100%;
-}
-
-
-.resultados {
-    grid-area: 3 / 1 / 4 / 4;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 500px;
-    grid-column-gap: 1em;
-    grid-row-gap: 0px;
+    justify-content: center;
 }
 
 .numerico {
-    grid-area: 1 / 1 / 2 / 2;
     background-color: rgb(236, 237, 238);
 }
 
 .numerico h1 {
     text-align: center;
     margin: 1em;
-}
-
-.grafico {
-    grid-area: 1 / 2 / 2 / 3;
 }
 
 .nav-active {
@@ -104,7 +63,6 @@
     justify-content: center;
     background-color: rgb(186, 185, 185, 0.2);
 }
-
 
 
 .text-formats {
@@ -263,23 +221,3 @@ textarea {
     text-align: center;
 }
 
-.semantica_parent {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr 100px;
-    grid-column-gap: 0.5em;
-    grid-row-gap: 1em;
-}
-
-.doc1 {
-    grid-area: 1 / 1 / 2 / 2;
-
-}
-
-.doc2 {
-    grid-area: 1 / 2 / 2 / 3;
-}
-
-.doc3 {
-    grid-area: 2 / 1 / 3 / 3;
-}
